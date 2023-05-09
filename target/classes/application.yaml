@@ -1,0 +1,14 @@
+mybatis:
+  type-aliases-package: com.hsms.mybatis.model
+  mapper-locations: /mapper/**/*.xml
+  type-handlers-package: com.hsms.mybatis.typehandler
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 1111
+    username: hsms
+    url: jdbc:mysql://127.0.0.1:3306/hsms
