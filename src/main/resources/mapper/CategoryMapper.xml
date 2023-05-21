@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hsms.mybatis.mapper.CategoryMapper">
+	<select id="selectListCategory" resultType="Category">
+		WITH RECURSIVE T3 (CTG_ID, CTG_NAME, CTG_LEVEL, PARENT_CTG_ID, CTG_SORT) AS
+		(
+			SELECT T1.CTG_ID, T1.CTG_NAME, T1.CTG_LEVEL, T1.PARENT_CTG_ID, CONVERT(T1.CTG_SORT,CHAR) AS CTG_SORT
+			FROM COM_CATEGORY T1
+			WHERE t1.PARENT_CTG_ID  IS NULL
+			AND GRADE_CODE = #{gradeCode}
+			AND SUBJECT_CODE = #{subjectCode}
+			AND USE_YN = 'Y'
+			
+			UNION ALL
+			
+			SELECT T2.CTG_ID, T2.CTG_NAME, T2.CTG_LEVEL, T2.PARENT_CTG_ID, CONCAT(T3.CTG_SORT,'_',LPAD(T2.CTG_SORT,3,'0')) AS  CTG_SORT
+			FROM COM_CATEGORY T2
+			INNER JOIN T3 ON T2.PARENT_CTG_ID = T3.CTG_ID
+		)
+		
+		SELECT * FROM T3
+		ORDER BY T3.CTG_SORT
+	</select>
+
+</mapper>
