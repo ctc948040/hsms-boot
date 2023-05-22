@@ -23,9 +23,20 @@ public class CategoryService {
 
     // 카테고리 조회
     public DefaultRes<List<Category>> selectListCategory(Category category) {
-        final List<Category> categoryList = categoryMapper.selectListCategory(category);
-        if (categoryList.isEmpty())
+    	
+    	String parentCtgId = category.getParentCtgId() == null?"ROOT":category.getParentCtgId();
+    	category.setParentCtgId(parentCtgId);
+        List<Category> categoryList = categoryMapper.selectListCategory(category);
+        
+        if (categoryList.isEmpty()) {
             return DefaultRes.res(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_CATEGORY);
+        } else {
+        	if("ROOT".equals(parentCtgId)) {
+        		Category root = categoryList.get(0);
+        		category.setParentCtgId(root.getId());//root ctgId로 자식검색
+        		root.setChildren(categoryMapper.selectListCategory(category));
+        	}
+        }
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_CATEGORY, categoryList);
     }
 }
