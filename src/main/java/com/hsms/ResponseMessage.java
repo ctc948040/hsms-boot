@@ -14,4 +14,10 @@ public class ResponseMessage {
     
     public static final String READ_CATEGORY = "카테고리 정보 조회 성공";
     public static final String NOT_FOUND_CATEGORY = "카테고리를 찾을 수 없습니다.";
+    
+    public static final String READ_QUESTION = "학습문제 정보 조회 성공";
+    public static final String NOT_FOUND_QUESTION = "학습문제를 찾을 수 없습니다.";
+    
+    public static final String READ_FILE = "파일 정보 조회 성공";
+    public static final String NOT_FOUND_FILE = "파일을 찾을 수 없습니다.";
 }
