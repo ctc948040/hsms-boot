@@ -1,3 +1,36 @@
+-- 학습문제
+CREATE TABLE IF NOT EXISTS COM_QUESTION (
+	QST_ID            VARCHAR(35)  NOT NULL DEFAULT (CONCAT('QST',HEX(UUID_TO_BIN(UUID(),1)))) COMMENT '문제아이디', -- 문제아이디
+	QST_TITLE         VARCHAR(100) NULL     COMMENT '타이틀', -- 타이틀
+	CTG_ID            VARCHAR(35)  NULL     COMMENT '카테고리코드', -- 카테고리아이디
+	QST_FILE_ID       VARCHAR(35)  NULL     COMMENT '문제파일아이디', -- 문제파일아이디
+	CMNT_FILE_ID      VARCHAR(35)  NULL     COMMENT '해설파일아이디', -- 해설파일아이디
+	ANSWER_TYPE_CODE  VARCHAR(8)   NULL     COMMENT '답타입[ANSTYP]
+	ANSTYP01 객관식
+	ANSTYP02 주관식
+	ANSTYP03 서술형', -- 답타입코드
+	COMMENT_TYPE_CODE VARCHAR(8)   NULL     COMMENT '해설타입[CMNTYP]
+	CMNTYP01 TEXT
+	CMNTYP02 이미지
+	', -- 해설타입코드
+	DFCLT_LEVEL_CODE  VARCHAR(8)   NULL     COMMENT '난위도[DFCLVL]
+	DFCLVL01 상
+	DFCLVL02 중
+	DFCLVL03 하', -- 난이도코드
+	USE_YN            VARCHAR(1)   NULL     COMMENT '사용여부', -- 사용여부
+	REG_USER_ID       VARCHAR(35)  NULL     COMMENT '등록자', -- 등록자
+	IN_DATE           VARCHAR(14)  NULL     COMMENT '등록일', -- 등록일
+	UP_DATE           VARCHAR(14)  NULL     COMMENT '수정일' -- 수정일
+)
+COMMENT '학습문제';
+
+/*ALTER TABLE COM_QUESTION
+	ADD CONSTRAINT PK_COM_QUESTION -- 학습문제 기본키
+	PRIMARY KEY (
+	QST_ID -- 문제아이디
+);*/
+
+
 --DROP TABLE IF EXISTS COM_USER;
 
 create TABLE IF NOT EXISTS COM_USER (
