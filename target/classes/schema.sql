@@ -1,3 +1,25 @@
+-- 문제바구니
+CREATE TABLE IF NOT EXISTS COM_BASKET (
+	USER_ID      VARCHAR(35) NOT NULL, -- 사용자아이디
+	GRADE_CODE   VARCHAR(35) NOT NULL COMMENT '학년코드', -- 학년코드
+	SUBJECT_CODE VARCHAR(35) NOT NULL COMMENT '과목코드', -- 과목코드
+	QST_ID       VARCHAR(35) NOT NULL, -- 문제아이디
+	QST_SORT     INT         NULL     COMMENT '학습문제순번', -- 문제순번
+	IN_DATE      VARCHAR(14) NULL     COMMENT '등록일', -- 등록일
+	UP_DATE      VARCHAR(14) NULL     COMMENT '수정일' -- 수정일
+)
+COMMENT '문제바구니';
+
+-- 문제바구니
+/*ALTER TABLE COM_BASKET
+	ADD CONSTRAINT PK_COM_BASKET -- 문제바구니 기본키
+	PRIMARY KEY (
+	USER_ID,      -- 사용자아이디
+	GRADE_CODE,   -- 학년코드
+	SUBJECT_CODE, -- 과목코드
+	QST_ID        -- 문제아이디
+	);*/
+
 -- 학습문제
 CREATE TABLE IF NOT EXISTS COM_QUESTION (
 	QST_ID            VARCHAR(35)  NOT NULL DEFAULT (CONCAT('QST',HEX(UUID_TO_BIN(UUID(),1)))) COMMENT '문제아이디', -- 문제아이디
@@ -31,16 +53,23 @@ COMMENT '학습문제';
 );*/
 
 
---DROP TABLE IF EXISTS COM_USER;
+-- 사용자
+CREATE TABLE IF NOT EXISTS COM_USER (
+	USER_ID  VARCHAR(35)  NOT NULL DEFAULT (CONCAT('USR',HEX(UUID_TO_BIN(UUID(),1)))) COMMENT '사용자아이디', -- 사용자아이디
+	LOGIN_ID VARCHAR(35)  NOT NULL COMMENT '로그인아이디', -- 로그인아이디
+	NAME     VARCHAR(50)  NOT NULL COMMENT '이름', -- 이름
+	PASSWORD VARCHAR(100) NOT NULL COMMENT '패스워드', -- 패스워드
+	STATE_CD VARCHAR(8)   NULL     COMMENT '상태코드', -- 상태코드
+	ADDRESS  VARCHAR(100) NULL     COMMENT '주소', -- 주소
+	EMAIL    VARCHAR(50)  NULL     COMMENT '이메일' -- 이메일
+)
+COMMENT '사용자정보';
 
-create TABLE IF NOT EXISTS COM_USER (
-  id       int unsigned primary key not null auto_increment,
-  name     varchar(32)              not null,
-  password varchar(32)               null,
-  state    tinyint                   null,
-  address  varchar(128)              null,
-  email    varchar(32)               null
-);
+/*ALTER TABLE COM_USER
+	ADD CONSTRAINT PK_COM_USER -- 사용자 기본키
+	PRIMARY KEY (
+	USER_ID -- 사용자아이디
+	);*/
 
 CREATE TABLE IF NOT EXISTS COM_FILE (
 	FILE_ID     VARCHAR(35)  NOT NULL DEFAULT (CONCAT('FIL',HEX(UUID_TO_BIN(UUID(),1)))) COMMENT '파일아이디', -- 파일아이디

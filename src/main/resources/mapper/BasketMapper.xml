@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hsms.mybatis.mapper.BasketMapper">
+	
+	<insert id="insertBasket">
+		INSERT INTO COM_BASKET(
+			USER_ID,
+			GRADE_CODE,
+			SUBJECT_CODE,
+			QST_ID,
+			QST_SORT
+		) (SELECT #{userId}, #{gradeCode}, #{subjectCode}, #{qstId},
+			(
+				SELECT IFNULL(MAX(QST_SORT),0) + 1 
+				FROM COM_BASKET 
+				WHERE 1=1
+				AND USER_ID = #{userId}
+				AND GRADE_CODE = #{gradeCode}
+				AND SUBJECT_CODE = #{subjectCode}
+			)  FROM DUAL
+		) ON DUPLICATE KEY UPDATE
+			UP_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+	</insert>
+	
+	
+	<select id="selectListBasket" resultType="Question">
+		SELECT B.*, COUNT(*) OVER() CNT, C.CTG_NAME,D.CODE_NAME AS DFCLT_LEVEL_NAME
+		FROM COM_BASKET A 
+		JOIN COM_QUESTION B
+		ON B.QST_ID = A.QST_ID 
+		LEFT OUTER JOIN COM_CATEGORY C
+		ON C.CTG_ID = B.CTG_ID
+		LEFT OUTER JOIN COM_CODE D
+		ON D.CODE_ID = B.DFCLT_LEVEL_CODE AND D.GROUP_CODE_ID='DFCLVL' /*난이도*/
+		WHERE 1=1
+		AND A.USER_ID = #{userId}
+		AND A.GRADE_CODE = #{gradeCode}
+		AND A.SUBJECT_CODE = #{subjectCode}
+		ORDER BY A.QST_SORT
+	</select>
+
+	<select id="selectBasket" resultType="Question">
+		SELECT B.*, C.CTG_NAME,D.CODE_NAME AS DFCLT_LEVEL_NAME
+		FROM COM_BASKET A 
+		JOIN COM_QUESTION B
+		ON B.QST_ID = A.QST_ID 
+		LEFT OUTER JOIN COM_CATEGORY C
+		ON C.CTG_ID = B.CTG_ID
+		LEFT OUTER JOIN COM_CODE D
+		ON D.CODE_ID = B.DFCLT_LEVEL_CODE AND D.GROUP_CODE_ID='DFCLVL' /*난이도*/
+		WHERE 1=1
+		AND A.USER_ID = #{userId}
+		AND A.GRADE_CODE = #{gradeCode}
+		AND A.SUBJECT_CODE = #{subjectCode}
+		AND A.QST_ID = #{qstId}
+	</select>
+</mapper>

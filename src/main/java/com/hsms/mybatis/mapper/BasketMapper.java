@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.hsms.mybatis.model.Basket;
 import com.hsms.mybatis.model.Question;
 
 /**
@@ -11,9 +12,11 @@ import com.hsms.mybatis.model.Question;
  * @date 2018/12/20
  */
 @Mapper
-public interface QuestionMapper {
+public interface BasketMapper {
     
-//	Question selectFile(Question question);
+	List<Question> selectListBasket(Basket basket);
 
-	List<Question> selectListQuestion(Question question);
+	void insertBasket(Basket basket);
+
+	Question selectBasket(Basket basket);
 }

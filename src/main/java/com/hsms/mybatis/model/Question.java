@@ -14,7 +14,10 @@ public class Question {
 	private String answerTypeCode;
 	private String commentTypeCode;
 	private String dfcltLevelCode;
+	private String dfcltLevelName;
+	private String ctgName;
 	private String pageNum;
+	private Integer cnt;
 	@Override
     public String toString() {
         return "Question{" +
@@ -27,6 +30,8 @@ public class Question {
                 "answerTypeCode=" + answerTypeCode +
                 "commentTypeCode=" + commentTypeCode +
                 "dfcltLevelCode=" + dfcltLevelCode +
+                "dfcltLevelName=" + dfcltLevelName +
+                "ctgName=" + ctgName +
                 '}';
     }
 }
