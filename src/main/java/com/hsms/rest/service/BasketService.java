@@ -37,4 +37,14 @@ public class BasketService {
 		Question question = basketMapper.selectBasket(basket);
 		return DefaultRes.res(StatusCode.OK, ResponseMessage.INSERT_BASKET, question);
 	}
+
+	public DefaultRes<Question> insertListBasket(List<Basket> basketList) {
+		
+		for(Basket basket : basketList) {
+			basketMapper.insertBasket(basket);
+		}
+		
+		Question question = basketMapper.selectBasket(basketList.get(0));
+		return DefaultRes.res(StatusCode.OK, ResponseMessage.INSERT_BASKET, question);
+	}
 }

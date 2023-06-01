@@ -12,17 +12,44 @@
 			QST_ID,
 			QST_SORT
 		) (SELECT #{userId}, #{gradeCode}, #{subjectCode}, #{qstId},
-			(
+			ifnull(#{qstSort},(
 				SELECT IFNULL(MAX(QST_SORT),0) + 1 
 				FROM COM_BASKET 
 				WHERE 1=1
 				AND USER_ID = #{userId}
 				AND GRADE_CODE = #{gradeCode}
 				AND SUBJECT_CODE = #{subjectCode}
-			)  FROM DUAL
+			))  FROM DUAL
 		) ON DUPLICATE KEY UPDATE
+			UP_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s'),
+			QST_SORT = ifnull(#{qstSort},(
+				SELECT IFNULL(MAX(QST_SORT),0) + 1 
+				FROM COM_BASKET 
+				WHERE 1=1
+				AND USER_ID = #{userId}
+				AND GRADE_CODE = #{gradeCode}
+				AND SUBJECT_CODE = #{subjectCode}
+			))
+			
+	</insert><!-- 
+	<insert id="insertListBasket" parameterType="java.util.List">
+		INSERT INTO COM_BASKET(
+			USER_ID,
+			GRADE_CODE,
+			SUBJECT_CODE,
+			QST_ID,
+			QST_SORT
+		) 
+		
+		(
+		<foreach collection="list" item="item" separator="union all">
+			SELECT #{item.userId}, #{item.gradeCode}, #{item.subjectCode}, #{item.qstId} ,#{item.qstSort} as qst_Sort		
+			</foreach>			
+		) a ON DUPLICATE KEY UPDATE
 			UP_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
-	</insert>
+			,qst_sort = a.qst_Sort
+		 
+	</insert> -->
 	
 	
 	<select id="selectListBasket" resultType="Question">
