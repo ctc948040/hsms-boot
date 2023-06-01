@@ -3,7 +3,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hsms.mybatis.mapper.BasketMapper">
-	
+	<delete id="deleteBasket">
+		DELETE FROM COM_BASKET
+		WHERE 1=1
+		AND USER_ID = #{userId}
+		AND GRADE_CODE = #{gradeCode}
+		AND SUBJECT_CODE = #{subjectCode}
+		AND QST_ID = #{qstId}
+	</delete>
+	<delete id="deleteAllBasket">
+		DELETE FROM COM_BASKET
+		WHERE 1=1
+		AND USER_ID = #{userId}
+		AND GRADE_CODE = #{gradeCode}
+		AND SUBJECT_CODE = #{subjectCode}
+	</delete>
 	<insert id="insertBasket">
 		INSERT INTO COM_BASKET(
 			USER_ID,

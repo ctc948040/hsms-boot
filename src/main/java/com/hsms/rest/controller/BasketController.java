@@ -31,11 +31,22 @@ public class BasketController {
         this.basketService = basketService;
     }
 	
-	@GetMapping("/selectListBasket")
+    @PostMapping("/selectListBasket")
 	public ResponseEntity<DefaultRes<List<Question>>> selectListBasket(@RequestBody Basket basket) {
 		
 		return new ResponseEntity<DefaultRes<List<Question>>>(basketService.selectListBasket(basket), HttpStatus.OK);
 	}
+    
+    @PostMapping("/deleteBasket")
+	public ResponseEntity<DefaultRes<?>> deleteBasket(@RequestBody Basket basket) {
+		
+		return new ResponseEntity<DefaultRes<?>>(basketService.deleteBasket(basket), HttpStatus.OK);
+	}
+    @PostMapping("/deleteAllBasket")
+    public ResponseEntity<DefaultRes<?>> deleteAllBasket(@RequestBody Basket basket) {
+    	
+    	return new ResponseEntity<DefaultRes<?>>(basketService.deleteAllBasket(basket), HttpStatus.OK);
+    }
 	
 	@PostMapping("/insertBasket")
 	public ResponseEntity<DefaultRes<Question>> insertBasket(@RequestBody Basket basket) {

@@ -21,4 +21,8 @@ public interface BasketMapper {
 	Question selectBasket(Basket basket);
 
 	void insertListBasket(List<Basket> basketList);
+
+	void deleteBasket(Basket basket);
+
+	void deleteAllBasket(Basket basket);
 }
