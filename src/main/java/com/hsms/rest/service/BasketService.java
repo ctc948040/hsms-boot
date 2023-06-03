@@ -57,4 +57,11 @@ public class BasketService {
 		basketMapper.deleteAllBasket(basket);
 		return DefaultRes.res(StatusCode.OK, ResponseMessage.INSERT_BASKET, null);
 	}
+
+	public DefaultRes<?> saveSortBasket(List<Basket> basketList) {
+		for(Basket basket : basketList) {
+			basketMapper.insertBasket(basket);
+		}
+		return DefaultRes.res(StatusCode.OK, ResponseMessage.UPDATE_BASKET, null);
+	}
 }

@@ -9,10 +9,14 @@ public class Category {
     private String ctgId;
     private String ctgName;
     private String parentCtgId;
-    private Integer ctgLevel;
+    private String parentCtgName;
+    private String ctgLevel;
     private String ctgSort;
+    private String ctgSort_;
     private String gradeCode;
+    private String gradeName;
     private String subjectCode;
+    private String subjectName;
     private String useYn;
     private String label;
     private String id;

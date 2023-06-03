@@ -39,4 +39,9 @@ public class CategoryService {
         }
         return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_CATEGORY, categoryList);
     }
+
+	public DefaultRes<List<Category>> selectListCategoryAll(Category category) {
+		List<Category> categoryList = categoryMapper.selectListCategoryAll(category);
+		return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_CATEGORY, categoryList);
+	}
 }

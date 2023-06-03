@@ -53,7 +53,11 @@ public class BasketController {
 		return new ResponseEntity<DefaultRes<Question>>(basketService.insertBasket(basket), HttpStatus.OK);
 	}
 	@PostMapping("/insertListBasket")
-	public ResponseEntity insertListBasket(@RequestBody List<Basket> basketList) {
+	public ResponseEntity<DefaultRes<Question>> insertListBasket(@RequestBody List<Basket> basketList) {
 		return new ResponseEntity<DefaultRes<Question>>(basketService.insertListBasket(basketList), HttpStatus.OK);
+	}
+	@PostMapping("/saveSortBasket")
+	public ResponseEntity<DefaultRes<?>> saveSortBasket(@RequestBody List<Basket> basketList) {
+		return new ResponseEntity<DefaultRes<?>>(basketService.saveSortBasket(basketList), HttpStatus.OK);
 	}
 }

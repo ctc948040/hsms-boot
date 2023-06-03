@@ -14,4 +14,6 @@ import com.hsms.mybatis.model.Category;
 public interface CategoryMapper {
     
     List<Category> selectListCategory(Category category);
+
+	List<Category> selectListCategoryAll(Category category);
 }

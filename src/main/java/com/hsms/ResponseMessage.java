@@ -23,4 +23,5 @@ public class ResponseMessage {
 	public static final String NOT_FOUND_BASKET = "학습문제를 찾을 수 없습니다.";
 	public static final String READ_BASKET = "학습문제 정보 조회 성공";
 	public static final String INSERT_BASKET = "문제바구니에 등록 성공";
+	public static final String UPDATE_BASKET = "문제바구니 업데이트 성공";
 }
