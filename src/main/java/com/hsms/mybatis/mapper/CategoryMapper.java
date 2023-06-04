@@ -16,4 +16,7 @@ public interface CategoryMapper {
     List<Category> selectListCategory(Category category);
 
 	List<Category> selectListCategoryAll(Category category);
+
+	int insertCategory(Category category);
+	int updateCategory(Category category);
 }

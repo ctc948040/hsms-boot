@@ -4,7 +4,7 @@
 
 <mapper namespace="com.hsms.mybatis.mapper.QuestionMapper">
 	<select id="selectListQuestion" resultType="Question">
-		SELECT  A.*, COUNT(*) OVER() CNT,B.CTG_NAME,C.CODE_NAME AS DFCLT_LEVEL_NAME
+		SELECT  A.*, COUNT(*) OVER() CNT,B.CTG_NAME,D.CODE_NAME AS DFCLT_LEVEL_NAME,C.FILE_NAME
 		FROM COM_QUESTION A
 		JOIN (
 			WITH RECURSIVE T3
@@ -24,12 +24,17 @@
 			SELECT * FROM T3
 		) B
 		ON B.CTG_ID = A.CTG_ID
-		LEFT OUTER JOIN COM_CODE C
-        ON C.CODE_ID = A.DFCLT_LEVEL_CODE AND C.GROUP_CODE_ID='DFCLVL' /*난이도*/
+		JOIN COM_FILE C
+		ON C.FILE_ID = A.QST_FILE_ID
+		LEFT OUTER JOIN COM_CODE D
+        ON D.CODE_ID = A.DFCLT_LEVEL_CODE AND D.GROUP_CODE_ID='DFCLVL' /*난이도*/
 		WHERE 1=1
 		AND A.USE_YN ='Y'
 		ORDER BY QST_ID DESC
+		<if test='allYn != "Y"'>
 		limit ${pageNum},10
+		</if> 
+		
 	</select>
 	<!-- <select id="selectListCategoryAll" resultType="Category">
 		WITH RECURSIVE T3

@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.hsms.ResponseMessage;
 import com.hsms.mybatis.mapper.CategoryMapper;
@@ -43,5 +44,40 @@ public class CategoryService {
 	public DefaultRes<List<Category>> selectListCategoryAll(Category category) {
 		List<Category> categoryList = categoryMapper.selectListCategoryAll(category);
 		return DefaultRes.res(StatusCode.OK, ResponseMessage.READ_CATEGORY, categoryList);
+	}
+	
+	public List<Category> importCategory(List<Category> categoryList) {
+		for(Category category : categoryList) {
+			try {
+				if(StringUtils.hasLength(category.getCtgId())) {
+					
+					int i = categoryMapper.updateCategory(category);
+					log.info("iiii{}",i);
+					if(i == 0) {
+						category.setImportState("변경없음");
+					} else {
+						category.setImportState("변경");
+					}
+					
+				} else {
+					
+					int i = categoryMapper.insertCategory(category);
+					if(i == 0) {
+						category.setImportState("추가없음");
+					} else {
+						category.setImportState("추가");
+					}
+				}
+				
+				
+				
+				
+				
+			} catch (Exception e) {
+				category.setImportState("에러:"+e.getMessage());
+			}
+//			break;
+		}
+		return categoryList;
 	}
 }

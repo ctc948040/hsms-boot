@@ -7,6 +7,7 @@ public class Question {
 
 	private String qstId;
 	private String qstTitle;
+	private String fileName;
 	private String qstPattern;
 	private String ctgId;
 	private String qstFileId;
@@ -18,6 +19,7 @@ public class Question {
 	private String ctgName;
 	private String pageNum;
 	private Integer cnt;
+	private String allYn;
 	@Override
     public String toString() {
         return "Question{" +

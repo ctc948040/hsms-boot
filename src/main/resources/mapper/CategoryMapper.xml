@@ -20,15 +20,15 @@
 	<select id="selectListCategoryAll" resultType="Category">
 		WITH RECURSIVE T3 (GRADE_CODE,SUBJECT_CODE,CTG_ID, CTG_NAME, CTG_LEVEL, PARENT_CTG_ID, CTG_SORT, CTG_SORT_T) AS
 		(
-			SELECT T1.GRADE_CODE,T1.SUBJECT_CODE,T1.CTG_ID, T1.CTG_NAME, T1.CTG_LEVEL, T1.PARENT_CTG_ID,T1.CTG_SORT, CONVERT(T1.CTG_SORT,CHAR) AS CTG_SORT_T
+			SELECT T1.GRADE_CODE,T1.SUBJECT_CODE,T1.CTG_ID, T1.CTG_NAME, T1.CTG_LEVEL, T1.PARENT_CTG_ID,T1.CTG_SORT, CONVERT(T1.CTG_SORT,CHAR(9999)) AS CTG_SORT_T
 			FROM COM_CATEGORY T1
-			WHERE t1.PARENT_CTG_ID  ='ROOT'
+			WHERE t1.CTG_ID  = #{parentCtgId}
 			AND GRADE_CODE=#{gradeCode}
 			AND SUBJECT_CODE=#{subjectCode}
 			
 			UNION ALL
 			
-			SELECT T2.GRADE_CODE,T2.SUBJECT_CODE,T2.CTG_ID, T2.CTG_NAME, T2.CTG_LEVEL, T2.PARENT_CTG_ID,T2.CTG_SORT, CONCAT(T3.CTG_SORT_T,'_',LPAD(T2.CTG_SORT,2,'0')) AS  CTG_SORT_T
+			SELECT T2.GRADE_CODE,T2.SUBJECT_CODE,T2.CTG_ID, T2.CTG_NAME, T2.CTG_LEVEL, T2.PARENT_CTG_ID,T2.CTG_SORT, CONCAT(T3.CTG_SORT_T,'_',LPAD(T2.CTG_SORT,3,'0')) AS  CTG_SORT_T
 			FROM COM_CATEGORY T2
 			INNER JOIN T3 ON T2.PARENT_CTG_ID = T3.CTG_ID
 		)
@@ -43,5 +43,71 @@
 		ON C2.CODE_ID = T3.SUBJECT_CODE
 		ORDER BY T3.CTG_SORT_T
 	</select>
+	
+	<update id="updateCategory">
+		UPDATE COM_CATEGORY
+		SET CTG_NAME = #{ctgName},
+			PARENT_CTG_ID = (
+				SELECT IFNULL( #{parentCtgId},
+					( 
+						SELECT * FROM (
+							SELECT CTG_ID FROM COM_CATEGORY
+								WHERE 1=1					
+								AND GRADE_CODE = #{gradeCode}
+								AND SUBJECT_CODE = #{subjectCode} 
+								AND CTG_NAME = #{parentCtgName}
+						) AS T 
+					)
+				) AS CTG_ID FROM DUAL
+			 ),
+			CTG_LEVEL = ${ctgLevel},
+			CTG_SORT  = ${ctgSort},
+			UP_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		WHERE CTG_ID = #{ctgId}
+	</update>
+	
+	<insert id="insertCategory" >
+		INSERT INTO COM_CATEGORY(
+			CTG_ID,
+			CTG_NAME,
+			PARENT_CTG_ID,
+			CTG_LEVEL,
+			CTG_SORT,
+			GRADE_CODE,
+			SUBJECT_CODE,
+			USE_YN,
+			IN_DATE
+		) (
+			SELECT 
+				IFNULL(#{ctgId},(SELECT  CONCAT('CTG',HEX(UUID_TO_BIN(UUID(),1))) AS UUID FROM DUAL)), 
+				#{ctgName}, 
+				IFNULL(#{parentCtgId},(
+					SELECT CTG_ID FROM COM_CATEGORY 
+					WHERE 1=1					
+					AND GRADE_CODE = #{gradeCode}
+					AND SUBJECT_CODE = #{subjectCode} 
+					AND CTG_NAME = #{parentCtgName}
+				)), 
+				#{ctgLevel}, 
+				#{ctgSort},
+				#{gradeCode},
+				#{subjectCode},
+				'Y',
+				DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+		  	FROM DUAL
+		) 
+		<!-- ON DUPLICATE KEY UPDATE
+			CTG_NAME = #{ctgName},
+			PARENT_CTG_ID = IFNULL(#{parentCtgId},(
+				SELECT CTG_ID FROM COM_CATEGORY 
+				WHERE 1=1					
+				AND GRADE_CODE = #{gradeCode}
+				AND SUBJECT_CODE = #{subjectCode} 
+				AND CTG_NAME = #{parentCtgName}
+			)),
+			CTG_LEVEL = #{ctgLevel},
+			CTG_SORT  = #{ctgSort} -->
+			<!-- ,UP_DATE = DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') -->			
+	</insert>
 
 </mapper>

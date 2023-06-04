@@ -17,6 +17,8 @@ public class Category {
     private String gradeName;
     private String subjectCode;
     private String subjectName;
+    private String importState;
+    
     private String useYn;
     private String label;
     private String id;
@@ -31,12 +33,12 @@ public class Category {
     public String toString() {
         return "Category{" +
                 "label=" + label +
-                "id=" + id +
-                "avatar=" + avatar +
-                "icon=" + icon +
-                "color=" + color +
-                "lazy=" + lazy +
-                "ctgId=" + ctgId +
+                ", id=" + id +
+                ", avatar=" + avatar +
+                ", icon=" + icon +
+                ", color=" + color +
+                ", lazy=" + lazy +
+                ", ctgId=" + ctgId +
                 ", ctgName='" + ctgName + '\'' +
                 ", parentCtgId='" + parentCtgId + '\'' +
                 ", ctgLevel='" + ctgLevel + '\'' +
@@ -44,6 +46,7 @@ public class Category {
                 ", gradeCode=" + gradeCode +
                 ", subjectCode=" + subjectCode +
                 ", useYn=" + useYn +
+                ", importState=" + importState +
                 '}';
     }
 }

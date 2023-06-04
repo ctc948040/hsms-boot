@@ -13,6 +13,7 @@ public class ResponseMessage {
     public static final String DB_ERROR = "데이터베이스 에러";
     
     public static final String READ_CATEGORY = "카테고리 정보 조회 성공";
+    public static final String WRITE_CATEGORY = "카테고리 정보 쓰기 성공";
     public static final String NOT_FOUND_CATEGORY = "카테고리를 찾을 수 없습니다.";
     
     public static final String READ_QUESTION = "학습문제 정보 조회 성공";
