@@ -10,5 +10,5 @@ import com.hsms.mybatis.model.ComModel;
  */
 @Mapper
 public interface ComMapper {
-	ComModel selectUuid();
+	ComModel selectUuid(ComModel comModel);
 }

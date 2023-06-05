@@ -16,4 +16,6 @@ public interface QuestionMapper {
 //	Question selectFile(Question question);
 
 	List<Question> selectListQuestion(Question question);
+
+	void insertQuestion(Question question);
 }

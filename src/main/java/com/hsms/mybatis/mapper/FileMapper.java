@@ -12,4 +12,6 @@ import com.hsms.mybatis.model.FileModel;
 public interface FileMapper {
     
 	FileModel selectFile(FileModel fileModel);
+
+	void insertFile(FileModel fileModel);
 }

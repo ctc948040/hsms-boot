@@ -5,7 +5,7 @@
 <mapper namespace="com.hsms.mybatis.mapper.ComMapper">
 
 	<select id="selectUuid" resultType="ComModel">
-		SELECT  CONCAT('DIR',HEX(UUID_TO_BIN(UUID(),1))) AS UUID
+		SELECT  CONCAT(#{prefix},HEX(UUID_TO_BIN(UUID(),1))) AS UUID
 		FROM DUAL
 	</select>
 

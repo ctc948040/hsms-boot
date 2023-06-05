@@ -8,6 +8,8 @@ public class Question {
 	private String qstId;
 	private String qstTitle;
 	private String qstPattern;
+	private String answer;
+	private String comment;
 	private String ctgId;
 	private String ctgName;
 	private String qstFileId;
@@ -22,6 +24,7 @@ public class Question {
 	private String displayTypeName;//표시타입명
 	private String dfcltLevelCode;
 	private String dfcltLevelName;
+	private String importState;
 	
 	private String pageNum;
 	private Integer cnt;
@@ -32,6 +35,8 @@ public class Question {
                 "qstId=" + qstId +
                 "qstTitle=" + qstTitle +
                 "qstPattern=" + qstPattern +
+                "qstPattern=" + answer +
+                "qstPattern=" + comment +
                 "ctgId=" + ctgId +
                 "ctgName=" + ctgName +
                 "qstFileId=" + qstFileId +
@@ -45,7 +50,7 @@ public class Question {
                 "displayTypeCode=" + displayTypeCode +
                 "displayTypeName=" + displayTypeName +
                 "dfcltLevelCode=" + dfcltLevelCode +
-                "dfcltLevelName=" + dfcltLevelName +
+                "importState=" + importState +
                 '}';
     }
 }

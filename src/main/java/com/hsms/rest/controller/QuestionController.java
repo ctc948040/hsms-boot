@@ -1,62 +1,60 @@
 package com.hsms.rest.controller;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hsms.mybatis.mapper.ComMapper;
+import com.hsms.ResponseMessage;
 import com.hsms.mybatis.model.ComModel;
-import com.hsms.mybatis.model.FileModel;
 import com.hsms.mybatis.model.Question;
 import com.hsms.res.DefaultRes;
-import com.hsms.rest.service.FilesStorageService;
+import com.hsms.rest.StatusCode;
+import com.hsms.rest.service.ComService;
+import com.hsms.rest.service.FileService;
 import com.hsms.rest.service.QuestionService;
 import com.hsms.util.CompressZip;
 import com.hsms.util.ExcelGenerator;
+import com.hsms.util.ExcelReader;
 import com.hsms.util.FileUtils;
 import com.hsms.util.UnZip;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.hsms.util.dateUtils;
 
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
-	private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
+//	private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
 	private QuestionService questionService;
+	
+	@Autowired
+    private FileService fileService;
 
 	@Autowired
-	private ComMapper comMapper;
+	private ComService comService;
 
-	@Autowired
-	private FilesStorageService filesStorageService;
 
 	private final String EXPORT_ROOT = "/ctc-work/HSMS/WORK_TEMP/export";
+	private final String IMPORT_ROOT = "/ctc-work/HSMS/WORK_TEMP/import";
 
 	public QuestionController(QuestionService questionService) {
 		this.questionService = questionService;
@@ -78,14 +76,12 @@ public class QuestionController {
 //			System.out.println("압축 해제 실패");
 //		}
 
-		ComModel comModel = comMapper.selectUuid();
+		ComModel comModel = comService.selectUuid();
 		String uuid = comModel.getUuid();
 		Path tempPath = Paths.get(EXPORT_ROOT + "/" + uuid);
 		FileUtils.createDirectory(tempPath);
-		try {
-
-			DateFormat dateFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
-			String currentDateTime = dateFormatter.format(new Date());
+		try {			
+			String currentDateTime = dateUtils.getDateString("yyyyMMddHHmmss");
 			question.setAllYn("Y");
 			DefaultRes<List<Question>> dr = questionService.selectListQuestion(question);
 			List<Question> list = dr.getData();
@@ -93,7 +89,8 @@ public class QuestionController {
 			for (Question qst : list) {
 				Path ctgPath = Paths.get(tempPath.toFile().getPath(), qst.getCtgName());
 				FileUtils.createDirectory(ctgPath);
-				filesStorageService.copyFile(qst.getQstFileId(), ctgPath);
+				fileService.copyFile(qst.getQstFileId(), ctgPath);
+				fileService.copyFile(qst.getCmntFileId(), ctgPath);
 			}
 
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -143,9 +140,76 @@ public class QuestionController {
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			FileUtils.deleteAll(tempPath);
+		}
+	}
+	
+	@PostMapping("/importExcel")
+	public ResponseEntity<DefaultRes<List<Question>>> importExcel(
+			@RequestParam("file") MultipartFile[] files) {
+		Path tempPath = null;
+		try {
+			ComModel comModel = comService.selectUuid();
+			 String uuid = comModel.getUuid();
+			 String tempPathStr= IMPORT_ROOT+"/" +uuid;
+			 tempPath = Paths.get(tempPathStr);
+			 FileUtils.createDirectory(tempPath);
+			 
+			 String fileName = files[0].getOriginalFilename();
+			 
+			 if(!fileName.endsWith(".zip")) {
+				 throw new RuntimeException("zip을 업로드 해주세요.");
+			 }
+			 
+			 FileUtils.save(tempPath,files[0]);
+			 
+			 UnZip unZip = new UnZip();
+				// 압축 해제 
+			if (!unZip.unZip(tempPathStr+"/", fileName, tempPathStr+"/")) {
+				throw new RuntimeException("압축 해제 실패");
+			}
+			
+			String unzipDir = tempPathStr + "/" + fileName.replaceAll(".zip", "");
+			File unzipDirFile = new File(unzipDir);
+			
+			File[] fileNameList = unzipDirFile.listFiles(new FilenameFilter() { 
+	            
+	            @Override 
+	            public boolean accept(File dir, String name) { 
+	                 return name.endsWith(".xlsx");
+	            }
+			});
+			
+			if(fileNameList.length != 1) {
+				throw new RuntimeException("하나의 엑셀만 업로드 해주세요.");
+			}
+			
+			Path excelPath = fileNameList[0].toPath();
+			
+			Resource resource = new UrlResource(excelPath.toUri());
+			
+			List<Map<String, String>> list = ExcelReader.read(resource);
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			TypeReference<List<Question>> tr = new TypeReference<List<Question>>() {};
+			
+			List<Question> questionList = objectMapper.convertValue(list, tr);
+			
+			questionList = questionService.importQuestion(questionList,unzipDirFile);
+			
+			DefaultRes<List<Question>> res = DefaultRes.res(StatusCode.OK, ResponseMessage.WRITE_QUESTION, questionList);
+			return new ResponseEntity<DefaultRes<List<Question>>>(res, HttpStatus.OK);
+		
+		} catch (Exception e) {
+			return new ResponseEntity<DefaultRes<List<Question>>>(DefaultRes.res(StatusCode.INTERNAL_SERVER_ERROR, e.getMessage(), null), HttpStatus.CONFLICT);
+		} finally {
+//			try {
+//				Thread.sleep(10000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 			FileUtils.deleteAll(tempPath);
 		}
 	}

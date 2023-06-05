@@ -21,6 +21,12 @@ public class CategoryService {
     public CategoryService(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
     }
+    
+ // 카테고리 조회
+    public Category selectCategory(Category category) {
+    	
+    	return categoryMapper.selectCategory(category);
+    }
 
     // 카테고리 조회
     public DefaultRes<List<Category>> selectListCategory(Category category) {

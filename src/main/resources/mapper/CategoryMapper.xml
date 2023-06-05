@@ -3,6 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hsms.mybatis.mapper.CategoryMapper">
+
+	<select id="selectCategory" resultType="Category">
+		SELECT * FROM COM_CATEGORY
+		WHERE CTG_ID = #{ctgId}
+	</select>
+
 	<select id="selectListCategory" resultType="Category">
 		SELECT  ctg_name as label,
 				ctg_id as id,
@@ -10,7 +16,7 @@
 				if((select count(*) from COM_CATEGORY where PARENT_CTG_ID = a.CTG_ID ) > 0 and ctg_level>1,	"folder",null) icon,
 				"secondary" as color,
 				if((select count(*) from COM_CATEGORY where PARENT_CTG_ID = a.CTG_ID ) > 0 and ctg_level>1,	true,false) lazy
-		FROM hsms.COM_CATEGORY a
+		FROM COM_CATEGORY a
 		WHERE PARENT_CTG_ID = #{parentCtgId}
 		AND GRADE_CODE = #{gradeCode}
 		AND SUBJECT_CODE = #{subjectCode}

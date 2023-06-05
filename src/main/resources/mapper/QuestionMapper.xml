@@ -64,5 +64,40 @@
 		</if> 
 		
 	</select>
+	<insert id="insertQuestion">
+		INSERT INTO COM_QUESTION
+		(
+			QST_ID,
+			QST_TITLE,
+			QST_PATTERN,
+			ANSWER,
+			COMMENT,
+			CTG_ID,
+			QST_FILE_ID,
+			CMNT_FILE_ID,
+			QST_TYPE_CODE,
+			ANSWER_KIND_CODE,
+			DISPLAY_TYPE_CODE,
+			DFCLT_LEVEL_CODE,
+			USE_YN
+		)
+		VALUES
+		(
+		    #{qstId},#{qstTitle},#{qstPattern},#{answer},#{comment},#{ctgId},#{qstFileId},
+		    #{cmntFileId},#{qstTypeCode},#{answerKindCode},#{displayTypeCode},#{dfcltLevelCode}
+		    ,'Y'
+		) ON DUPLICATE KEY UPDATE
+			QST_TITLE = #{qstTitle},
+			QST_PATTERN = #{qstPattern},
+			ANSWER = #{answer},
+			COMMENT = #{comment},
+			CTG_ID = #{ctgId},
+			QST_FILE_ID = #{qstFileId},
+			CMNT_FILE_ID = #{cmntFileId},
+			QST_TYPE_CODE = #{qstTypeCode},
+			ANSWER_KIND_CODE = #{answerKindCode},
+			DISPLAY_TYPE_CODE = #{displayTypeCode},
+			DFCLT_LEVEL_CODE = #{dfcltLevelCode}
+	</insert>
 
 </mapper>

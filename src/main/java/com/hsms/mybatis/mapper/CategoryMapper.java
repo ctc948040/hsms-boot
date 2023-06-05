@@ -19,4 +19,6 @@ public interface CategoryMapper {
 
 	int insertCategory(Category category);
 	int updateCategory(Category category);
+
+	Category selectCategory(Category category);
 }

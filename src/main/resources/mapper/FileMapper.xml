@@ -9,5 +9,19 @@
 		FROM COM_FILE
 		WHERE FILE_ID = #{fileId}
 	</select>
+	<insert id="insertFile">
+		INSERT INTO COM_FILE
+		(
+		    FILE_ID,
+		    FILE_NAME,
+		    FILE_PATH
+		)
+		VALUES
+		(
+		    #{fileId},
+		    #{fileName},
+		    #{filePath}
+		)
+	</insert>
 
 </mapper>
