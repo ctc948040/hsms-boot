@@ -1,5 +1,7 @@
 package com.hsms.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +20,14 @@ public class ExcelGenerator {
 
 	private List<Map<String,String>> mapList;
 	private List<String> keyList;
+	private List<String> displayList;
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
 
-	public ExcelGenerator(List<String> keyList, List<Map<String,String>> mapList) {
+	public ExcelGenerator(List<String> keyList,List<String> displayList, List<Map<String,String>> mapList) {
 		this.mapList = mapList;
 		this.keyList = keyList;
+		this.displayList = displayList;
 		workbook = new XSSFWorkbook();
 	}
 
@@ -36,7 +40,7 @@ public class ExcelGenerator {
 		font.setFontHeight(16);
 		style.setFont(font);
 		int i=0;
-		for(String key : this.keyList) {
+		for(String key : this.displayList) {
 			createCell(row, i++, key, style);
 		}
 	}
@@ -71,6 +75,16 @@ public class ExcelGenerator {
 				createCell(row, columnCount++, record.get(key), style);
 			}
 		}
+	}
+	
+	public void saveExcelFile(File file) throws IOException {
+		writeHeader();
+		write();
+		
+		FileOutputStream fileOutputStream = new FileOutputStream(file);
+		workbook.write(fileOutputStream);
+		workbook.close();
+		fileOutputStream.close();
 	}
 
 	public void generateExcelFile(HttpServletResponse response) throws IOException {

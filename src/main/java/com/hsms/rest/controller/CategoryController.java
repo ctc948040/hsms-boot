@@ -69,13 +69,11 @@ public class CategoryController {
 
         @SuppressWarnings("unchecked")
 		List<Map<String,String>> listMap = objectMapper.convertValue(list, List.class);
-        
-//        System.out.println(listMap);
-        
+                
         List<String> keyList = Arrays.asList(new String[]{"gradeCode","gradeName","subjectCode","subjectName","parentCtgId","parentCtgName","ctgId","ctgName","ctgLevel","ctgSort"});
+        List<String> displayList = Arrays.asList(new String[]{"학년코드[gradeCode]","학년[gradeName]","과목코드[subjectCode]","과목명[subjectName]","부모카테고리아이디[parentCtgId]","부모카테고리명[parentCtgName]","카테고리아이디[ctgId]","카테고리명[ctgName]","레벨[ctgLevel]","순번[ctgSort]"});
 
-
-        ExcelGenerator generator = new ExcelGenerator(keyList,listMap);
+        ExcelGenerator generator = new ExcelGenerator(keyList,displayList,listMap);
         generator.generateExcelFile(response);
     }
 }
