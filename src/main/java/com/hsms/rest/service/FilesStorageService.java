@@ -9,7 +9,7 @@ public class FilesStorageService {
 //	@Autowired
 //	private FileService fileService;
 //
-//	private final String FILE_DATA_ROOT = "/ctc-work/HSMS/FILE_DATA";	
+//	private final String FILE_DATA_ROOT = "/efs/hsms/FILE_DATA";	
 
 	
 

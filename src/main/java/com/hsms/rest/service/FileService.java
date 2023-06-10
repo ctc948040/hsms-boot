@@ -24,7 +24,7 @@ public class FileService {
     @Autowired
 	private ComService comService;
     
-    private final String FILE_DATA_ROOT = "/ctc-work/HSMS/FILE_DATA";
+    private final String FILE_DATA_ROOT = "/efs/hsms/FILE_DATA";
 
     public FileService(FileMapper fileMapper) {
         this.fileMapper = fileMapper;
