@@ -16,9 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ExcelReader {
 
-	public static void main(String[] args) {
-		System.out.println(ExcelReader.getKey("최태철[aaaa]"));
-	}
+//	public static void main(String[] args) {
+//		System.out.println(ExcelReader.getKey("최태철[aaaa]"));
+//	}
 	
 	public static String getKey(String key) {
 		String ret = "";
