@@ -1,5 +1,5 @@
-#server:
-#  shutdown: graceful
+server:
+  shutdown: graceful
   
 
 mybatis:
@@ -11,8 +11,8 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 30
 spring:
-#  lifecycle:
-#    timeout-per-shutdown-phase: 30s
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
   datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
