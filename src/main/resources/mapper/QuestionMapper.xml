@@ -32,7 +32,13 @@
 			(
 			SELECT T1.CTG_ID, T1.CTG_NAME, T1.CTG_LEVEL, T1.PARENT_CTG_ID
 			FROM COM_CATEGORY T1
-			WHERE T1.CTG_ID = #{ctgId}
+			WHERE T1.CTG_ID = IFNULL(#{ctgId},(
+					SELECT CTG_ID FROM COM_CATEGORY 
+					WHERE 1=1
+						AND GRADE_CODE=#{gradeCode} 
+						AND SUBJECT_CODE=#{subjectCode} 
+						AND PARENT_CTG_ID='ROOT'
+				))
 			AND USE_YN = 'Y'
 		
 			UNION ALL

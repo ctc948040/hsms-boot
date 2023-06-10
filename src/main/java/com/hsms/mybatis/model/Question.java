@@ -25,6 +25,8 @@ public class Question {
 	private String dfcltLevelCode;
 	private String dfcltLevelName;
 	private String importState;
+	private String gradeCode;
+	private String subjectCode;
 	
 	private String pageNum;
 	private Integer cnt;

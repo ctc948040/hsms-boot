@@ -1,3 +1,7 @@
+server:
+  shutdown: graceful
+  
+
 mybatis:
   type-aliases-package: com.hsms.mybatis.model
   mapper-locations: /mapper/**/*.xml
@@ -7,9 +11,11 @@ mybatis:
     default-fetch-size: 100
     default-statement-timeout: 30
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
   datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     password: 1111
     username: hsms
-    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/hsms
+    url: jdbc:log4jdbc:mysql://3.36.185.136:3306/hsms

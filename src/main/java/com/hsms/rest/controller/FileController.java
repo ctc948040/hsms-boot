@@ -68,7 +68,7 @@ public class FileController {
 
 	@GetMapping("/download")
 	public ResponseEntity<Object> download(FileModel fileModel, HttpServletResponse response) {
-		String rootPath = "/ctc-work/HSMS/FILE_DATA";
+		String rootPath = "/efs/hsms/FILE_DATA";
 
 		try {
 			FileModel retFileModel = fileService.selectFile(fileModel);

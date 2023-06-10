@@ -53,8 +53,8 @@ public class QuestionController {
 	private ComService comService;
 
 
-	private final String EXPORT_ROOT = "/ctc-work/HSMS/WORK_TEMP/export";
-	private final String IMPORT_ROOT = "/ctc-work/HSMS/WORK_TEMP/import";
+	private final String EXPORT_ROOT = "/efs/hsms/WORK_TEMP/export";
+	private final String IMPORT_ROOT = "/efs/hsms/WORK_TEMP/import";
 
 	public QuestionController(QuestionService questionService) {
 		this.questionService = questionService;

@@ -18,4 +18,16 @@ public class SpringConfig implements WebMvcConfigurer {
             .findFirst()
             .ifPresent(converter -> ((MappingJackson2HttpMessageConverter) converter).setDefaultCharset(StandardCharsets.UTF_8));
     }
+    
+//    @Bean
+//    public GracefulShutdown gracefulShutdown() {
+//        return new GracefulShutdown();
+//    }
+//
+//    @Bean
+//    public ConfigurableServletWebServerFactory webServerFactory(final GracefulShutdown gracefulShutdown) {
+//        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+//        factory.addConnectorCustomizers(gracefulShutdown);
+//        return factory;
+//    }
 }
